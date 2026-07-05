@@ -11,7 +11,7 @@ The repository is organized as a monorepo consisting of:
 
 ## 📱 Mobile APK Download
 Get the pre-compiled Android release binary directly:
-👉 **[Download Android Release APK](file:///e:/Dot%20Net/PatientManagementSystem/mobile/build/app/outputs/flutter-apk/app-release.apk)**
+👉 **[Download Release APK (Direct Raw link)](https://github.com/bilash-biswas/patient-care-system/raw/main/mobile/build/app/outputs/flutter-apk/app-release.apk)** or browse the file **[here](./mobile/build/app/outputs/flutter-apk/app-release.apk)**.
 
 ---
 
