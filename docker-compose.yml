@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:15
+    container_name: patient-management-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bilashbi
+      POSTGRES_DB: PatientManagementDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: patient-management-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hospital.com
+      PGADMIN_DEFAULT_PASSWORD: bilashbi
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  redis:
+    image: redis:7-alpine
+    container_name: patient-management-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: patient-management-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=PatientManagementDb;Username=postgres;Password=bilashbi;Port=5432;
+      - ConnectionStrings__Redis=redis:6379
+      - JwtSettings__Secret=PatientManagementSystemSecureKey2024!@#$
+      - Stripe__SecretKey=sk_test_51MockStripeKeyForTesting12345
+      - Stripe__PublishableKey=pk_test_51MockStripeKeyForTesting12345
+    ports:
+      - "5278:8080"
+    depends_on:
+      - db
+      - redis
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: patient-management-web
+    environment:
+      - NEXT_PUBLIC_API_URL=http://192.168.10.235:5278/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
